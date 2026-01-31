@@ -71,3 +71,30 @@ plt.show()
 # Save for next steps
 df.to_csv("merged_monthly_macro_market.csv")
 print("Saved: merged_monthly_macro_market.csv")
+
+# =========================
+# 6) CORRELATION ANALYSIS
+# =========================
+corr_cols = ["sp500_ret_m", "infl_yoy", "unrate", "fedfunds"]
+corr_matrix = df[corr_cols].corr()
+
+print("\nCorrelation matrix:")
+print(corr_matrix)
+# =========================
+# 7) REGRESSION ANALYSIS
+# =========================
+import statsmodels.api as sm
+
+# Define dependent and independent variables
+y = df["sp500_ret_m"]
+X = df[["infl_yoy", "unrate", "fedfunds"]]
+
+# Add constant (intercept)
+X = sm.add_constant(X)
+
+# Fit OLS regression
+model = sm.OLS(y, X).fit()
+
+print("\nOLS Regression Results:")
+print(model.summary())
+
