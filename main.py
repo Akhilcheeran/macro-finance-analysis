@@ -98,3 +98,26 @@ model = sm.OLS(y, X).fit()
 print("\nOLS Regression Results:")
 print(model.summary())
 
+# =========================
+# 8) REGIME SPLIT: PRE vs POST 2022
+# =========================
+
+import statsmodels.api as sm
+
+# Split the dataset
+df_pre = df[df.index < "2022-01-01"]
+df_post = df[df.index >= "2022-01-01"]
+
+def run_regression(data, label):
+    y = data["sp500_ret_m"]
+    X = data[["infl_yoy", "unrate", "fedfunds"]]
+    X = sm.add_constant(X)
+
+    model = sm.OLS(y, X).fit()
+
+    print(f"\n--- Regression results: {label} ---")
+    print(model.summary())
+
+# Run regressions
+run_regression(df_pre, "PRE-2022")
+run_regression(df_post, "POST-2022")
